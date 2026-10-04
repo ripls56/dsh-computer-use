@@ -45,13 +45,13 @@
   ],
   "license": "MIT",
   "author": "crazy_th",
-  "homepage": "https://github.com/ThreeBody6666/dsh-computer-use#readme",
+  "homepage": "https://github.com/ripls56/dsh-computer-use#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ThreeBody6666/dsh-computer-use.git"
+    "url": "git+https://github.com/ripls56/dsh-computer-use.git"
   },
   "bugs": {
-    "url": "https://github.com/ThreeBody6666/dsh-computer-use/issues"
+    "url": "https://github.com/ripls56/dsh-computer-use/issues"
   },
   "publishConfig": {
     "access": "public"
@@ -84,6 +84,10 @@
   },
   "devDependencies": {
     "@deepseek-ai/schemastery": "^3.18.1",
+    "@deepseek-ai/cordis": "4.0.1",
+    "@deepseek-ai/dsh-attachment": "0.1.0-rc.7",
+    "@deepseek-ai/dsh-settings": "0.1.0-rc.7",
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.7",
     "@types/node": "^24.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.0",

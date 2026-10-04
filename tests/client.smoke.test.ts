@@ -155,7 +155,7 @@ describe('client half wiring', () => {
   it('renders the pill only when the control namespace is served', () => {
     const { mod, jsx } = loadClientModule()
     const ctx = makeCtx()
-    ctx.controlScope.getSnapshot = () => ({ status: 'loading', writable: false, value: undefined, base: undefined, user: undefined, revision: undefined })
+    ;(ctx.controlScope as any).getSnapshot = () => ({ status: 'loading', writable: false })
     mod.apply(ctx)
     const pill = ctx.registrations.find(r => r.def.name === 'conversation.input.right')!
     const face = (pill.def.inject as () => Record<string, unknown>)()
