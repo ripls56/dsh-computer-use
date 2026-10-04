@@ -36,6 +36,7 @@ export async function analyzeScreenshot(settings: VisionSettings, pngBase64: str
   const response = await fetch(visionEndpoint(settings.baseURL), {
     method: 'POST',
     headers: { Authorization: `Bearer ${settings.apiKey}`, 'Content-Type': 'application/json' },
+    signal: AbortSignal.timeout(60_000),
     body: JSON.stringify({
       model: settings.model,
       max_tokens: settings.maxTokens,

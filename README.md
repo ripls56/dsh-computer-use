@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md)
 
-Native Windows Computer Use bundle for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It uses the DSH Cordis tool registry directly and does not use MCP. Verified against DSH `0.1.1-rc.1`.
+Native Windows Computer Use bundle for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It uses the DSH Cordis tool registry directly and does not use MCP. Verified against DSH `0.2.0-rc.2`.
 
 ## Capabilities
 
@@ -25,7 +25,7 @@ Two independent gates guard every computer action:
 
 ## Vision model settings
 
-After installing and restarting DSH, open **Settings > Plugins > Plugin configuration**, then expand **Computer Use Vision**. Enter an OpenAI-compatible HTTPS base URL, API key, vision-capable model name, and response-token limit, then enable the model. The API key is stored in DSH's settings secret field and is not included in Cordis configuration or tool responses.
+After installing and restarting DSH, open **Settings > Plugins**, then expand the **Computer Use Vision** row. Enter an OpenAI-compatible HTTPS base URL, API key, vision-capable model name, and response-token limit, then enable the model. The API key is stored in DSH's settings secret field and is not included in Cordis configuration or tool responses.
 
 | Field | Requirement |
 | --- | --- |
@@ -41,7 +41,7 @@ After installing and restarting DSH, open **Settings > Plugins > Plugin configur
 
 ### Why this appears in the settings UI
 
-DSH only exposes selected settings namespaces to its browser configuration API. The plugin registers the vision configuration as a configurable model provider, so the native Web UI can safely read and save it. Computer-control tools are loaded separately, preventing their runtime dependencies from delaying the settings card.
+DSH serves every registered settings namespace to the browser through its settings describe mirror. The plugin registers `computer-use-vision` and `computer-use-control` as live namespaces; the browser half edits them through `ctx.configForms` and registers its card into the Plugins page while the Host serves the namespace. Computer-control tools are loaded as a separate entry, preventing their runtime dependencies from delaying the settings card.
 
 ## Install
 

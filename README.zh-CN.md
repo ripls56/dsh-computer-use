@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的原生 Windows Computer Use 插件。它直接注册到 DSH 的 Cordis 工具体系，不使用 MCP。已在 DSH `0.1.1-rc.1` 上实测兼容。
+面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的原生 Windows Computer Use 插件。它直接注册到 DSH 的 Cordis 工具体系，不使用 MCP。已在 DSH `0.2.0-rc.2` 上实测兼容。
 
 ## 功能
 
@@ -41,7 +41,7 @@ API Key 使用 DSH Settings 的 secret 字段保存，不写入 Cordis 配置或
 
 ### 为什么会显示在设置页面
 
-DSH 的浏览器配置 API 只会暴露指定的设置命名空间。插件将视觉配置注册为可配置模型提供方，因此原生 Web UI 可以安全读取和保存这部分配置。Computer Use 工具与设置入口分开加载，避免工具运行时依赖阻塞设置卡片显示。
+DSH 通过设置 describe 镜像向浏览器提供所有已注册的设置命名空间。插件把 `computer-use-vision` 与 `computer-use-control` 注册为 live 命名空间；浏览器侧通过 `ctx.configForms` 编辑它们，并在 Host 提供该命名空间时把设置卡片注册进插件页。Computer Use 工具作为独立入口加载，避免工具运行时依赖阻塞设置卡片显示。
 
 ## 安装
 

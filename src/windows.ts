@@ -18,11 +18,14 @@ export async function invokeWindows<T>(action: string, payload: Record<string, u
   const { stdout, stderr } = await execFileAsync('powershell.exe', [
     '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', driverPath, '-PayloadBase64', encoded,
   ], { windowsHide: true, maxBuffer: 32 * 1024 * 1024 })
-  if (stderr.trim()) throw new Error(stderr.trim())
+  // A non-empty stderr alone is not a failure: Windows PowerShell mixes benign
+  // warnings into stderr while the driver's JSON answer rides stdout. Only a
+  // non-zero exit (execFile rejects) or unparsable stdout is an error.
   try {
     return JSON.parse(stdout) as T
   } catch {
-    throw new Error(`Windows driver returned invalid JSON: ${stdout.slice(0, 200)}`)
+    const detail = stderr.trim() ? ` stderr: ${stderr.trim().slice(0, 500)}` : ''
+    throw new Error(`Windows driver returned invalid JSON: ${stdout.slice(0, 200)}${detail}`)
   }
 }
 

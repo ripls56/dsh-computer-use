@@ -16,32 +16,18 @@ const visionSettingsSchema: Schema<VisionSettings> = Schema.object({
 })
 
 export function apply(ctx: Context): void {
-  // The settings API only exposes namespaces owned by configurable model
-  // providers. A vision model is exactly that kind of configuration, while
-  // the computer-use tool remains responsible for consuming the values.
-  ctx.inject(['llm', 'settings'], (services) => {
-    const namespace = settingsNamespace('computer-use-vision')
-    services.settings.register(namespace, visionSettingsSchema, { applies: 'live' })
-    services.llm.registerConfigurableProviders([{
-      provider: 'computer-use-vision',
-      displayName: 'Computer Use Vision',
-      settingsNs: namespace,
-      settingsPath: [],
-      declared: false,
-    }])
-    // Master switch for the computer_* tools themselves. Exposed to the Web GUI
-    // the same way (configurable model provider) so the composer switch and the
-    // settings card can read and write it.
-    const controlNamespace = settingsNamespace('computer-use-control')
-    services.settings.register(controlNamespace, Schema.object({
+  // DSH >= 0.2.0 serves every registered settings namespace to the browser
+  // through the settings describe mirror, so the client half edits these two
+  // namespaces through `ctx.configForms` directly. The old
+  // `llm.registerConfigurableProviders` detour (needed by older builds whose
+  // settings API only exposed model-provider namespaces) is gone: it added two
+  // dead rows to the Models page without enabling editing there.
+  ctx.inject(['settings'], (services) => {
+    services.settings.register(settingsNamespace('computer-use-vision'), visionSettingsSchema, { applies: 'live' })
+    // Master switch for the computer_* tools themselves, toggled by the
+    // composer pill and readable by the tools' pre-execute gate.
+    services.settings.register(settingsNamespace('computer-use-control'), Schema.object({
       enabled: Schema.boolean().default(true),
     }), { applies: 'live' })
-    services.llm.registerConfigurableProviders([{
-      provider: 'computer-use-control',
-      displayName: 'Computer Use',
-      settingsNs: controlNamespace,
-      settingsPath: [],
-      declared: false,
-    }])
   })
 }
